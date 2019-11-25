@@ -4,10 +4,9 @@
 
 #define TAMANIO_BUFFER 10000
 
-int main() {
-
+int read_file(int *pixels) {
     char buffer[TAMANIO_BUFFER];
-    int pixels[576];
+    //int pixels[576];
     FILE *file;
 
     size_t readBytes;
@@ -36,10 +35,10 @@ int main() {
 
     iterator = 0;
 
-    while (iterator < 576){
+    /*while (iterator < 576){
         printf("%d\n",pixels[iterator]);
         iterator++;
-    }
+    }*/
     
     fclose(file);
     return EXIT_SUCCESS;

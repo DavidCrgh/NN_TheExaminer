@@ -6,6 +6,7 @@
 #include <dirent.h>
 
 #include "include/datasets.h"
+#include "read_file.c"
 
 /**
  * Convert from the big endian format in the dataset if we're on a little endian
@@ -25,12 +26,27 @@
 #endif
 }*/
 
+uint32_t count_files(const char *path){
+    uint32_t file_count = 0;
+    DIR * dirp;
+    struct dirent * entry;
+
+    dirp = opendir(path); /* There should be error handling after this */
+    while ((entry = readdir(dirp)) != NULL) {
+        if (entry->d_type == DT_REG) { /* If the entry is a regular file */
+            file_count++;
+        }
+    }
+    closedir(dirp);
+    return file_count;
+}
+
 /**
  * Read labels from file.
  * 
  * File format: http://yann.lecun.com/exdb/mnist/
  */
-uint8_t * get_labels(const char * path, uint32_t * number_of_labels)
+uint8_t * get_labels(const char * path, uint32_t number_of_labels)
 {
     /*FILE * stream;
     mnist_label_file_header_t header;
@@ -85,8 +101,12 @@ uint8_t * get_labels(const char * path, uint32_t * number_of_labels)
  * 
  * File format: http://yann.lecun.com/exdb/mnist/
  */
-image_t * get_images(const char * path, uint32_t * number_of_images)
+image_t * get_images(const char * path, uint32_t number_of_images)
 {
+    image_t *images = malloc(number_of_images * sizeof(image_t));
+    int i = 0; // Contador de imagenes
+    //image_t images[number_of_images];
+
     DIR *dir;
     struct dirent *ent;
 
@@ -99,10 +119,23 @@ image_t * get_images(const char * path, uint32_t * number_of_images)
         while ((ent = readdir (dir)) != NULL) {
             if(ent->d_name[0] != '.'){
                 char *buffer = (char *)calloc(PATH_MAX + 1, sizeof(char));
+
+                // Construye commando para invocar al script de python con el path de la imagen
+                strcat(buffer, "python3 Preprocessor/preproc.py '");
                 strcat(buffer, full_path);
                 strcat(buffer, ent->d_name);
+                strcat(buffer, "'");
                 printf ("%s\n", buffer);
+
+                // Ejecuta el comando que corre el script
+                system(buffer);
+
+                int px[IMAGE_SIZE];
+                read_file(images[i].pixels);
+
+                // Libera la memoria
                 free(buffer);
+                i++;
             }    
         }
         closedir (dir);
@@ -165,7 +198,7 @@ image_t * get_images(const char * path, uint32_t * number_of_images)
 
     fclose(stream);*/
 
-    return NULL;
+    return images;
 }
 
 dataset_t * get_dataset(const char * image_path, const char * label_path)
