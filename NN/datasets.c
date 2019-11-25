@@ -30,54 +30,33 @@
  * 
  * File format: http://yann.lecun.com/exdb/mnist/
  */
-uint8_t * get_labels(const char * path, uint32_t * number_of_labels)
+char * get_labels(const char * path, uint32_t * number_of_labels)
 {
-    /*FILE * stream;
-    mnist_label_file_header_t header;
-    uint8_t * labels;
+    DIR *dir;
+    struct dirent *ent;
+    char labels [*number_of_labels]; 
 
-    stream = fopen(path, "rb");
-
-    if (NULL == stream) {
-        fprintf(stderr, "Could not open file: %s\n", path);
-        return NULL;
+    char full_path[PATH_MAX + 1];
+    realpath(path, full_path);
+    strcat(full_path, "/");
+    
+    if ((dir = opendir (path)) != NULL) {
+    /* print all the files and directories within directory */
+        memset(labels, 0, sizeof(labels));
+        while ((ent = readdir (dir)) != NULL) {
+            if(ent->d_name[0] != '.'){
+                char letter = ent->d_name[0];
+                strncat(labels, &letter,1);
+            }    
+        }
+        closedir (dir);
+    } else {
+        /* could not open directory */
+        perror ("");
+        return EXIT_FAILURE;
     }
 
-    if (1 != fread(&header, sizeof(mnist_label_file_header_t), 1, stream)) {
-        fprintf(stderr, "Could not read label file header from: %s\n", path);
-        fclose(stream);
-        return NULL;
-    }
-
-    header.magic_number = map_uint32(header.magic_number);
-    header.number_of_labels = map_uint32(header.number_of_labels);
-
-    if (MNIST_LABEL_MAGIC != header.magic_number) {
-        fprintf(stderr, "Invalid header read from label file: %s (%08X not %08X)\n", path, header.magic_number, MNIST_LABEL_MAGIC);
-        fclose(stream);
-        return NULL;
-    }
-
-    *number_of_labels = header.number_of_labels;
-
-    labels = malloc(*number_of_labels * sizeof(uint8_t));
-
-    if (labels == NULL) {
-        fprintf(stderr, "Could not allocated memory for %d labels\n", *number_of_labels);
-        fclose(stream);
-        return NULL;
-    }
-
-    if (*number_of_labels != fread(labels, 1, *number_of_labels, stream)) {
-        fprintf(stderr, "Could not read %d labels from: %s\n", *number_of_labels, path);
-        free(labels);
-        fclose(stream);
-        return NULL;
-    }
-
-    fclose(stream);*/
-
-    return NULL;
+    return labels;
 }
 
 /**
@@ -111,60 +90,7 @@ image_t * get_images(const char * path, uint32_t * number_of_images)
         perror ("");
         return EXIT_FAILURE;
     }
-    /*FILE * stream;
-    //mnist_image_file_header_t header;
-    image_t * images;
-
-    stream = fopen(path, "rb");
-
-    if (NULL == stream) {
-        fprintf(stderr, "Could not open file: %s\n", path);
-        return NULL;
-    }
-
-    if (1 != fread(&header, sizeof(mnist_image_file_header_t), 1, stream)) {
-        fprintf(stderr, "Could not read image file header from: %s\n", path);
-        fclose(stream);
-        return NULL;
-    }
-
-    header.magic_number = map_uint32(header.magic_number);
-    header.number_of_images = map_uint32(header.number_of_images);
-    header.number_of_rows = map_uint32(header.number_of_rows);
-    header.number_of_columns = map_uint32(header.number_of_columns);
-
-    if (MNIST_IMAGE_MAGIC != header.magic_number) {
-        fprintf(stderr, "Invalid header read from image file: %s (%08X not %08X)\n", path, header.magic_number, MNIST_IMAGE_MAGIC);
-        fclose(stream);
-        return NULL;
-    }
-
-    if (MNIST_IMAGE_WIDTH != header.number_of_rows) {
-        fprintf(stderr, "Invalid number of image rows in image file %s (%d not %d)\n", path, header.number_of_rows, MNIST_IMAGE_WIDTH);
-    }
-
-    if (MNIST_IMAGE_HEIGHT != header.number_of_columns) {
-        fprintf(stderr, "Invalid number of image columns in image file %s (%d not %d)\n", path, header.number_of_columns, MNIST_IMAGE_HEIGHT);
-    }
-
-    *number_of_images = header.number_of_images;
-    images = malloc(*number_of_images * sizeof(mnist_image_t));
-
-    if (images == NULL) {
-        fprintf(stderr, "Could not allocated memory for %d images\n", *number_of_images);
-        fclose(stream);
-        return NULL;
-    }
-
-    if (*number_of_images != fread(images, sizeof(mnist_image_t), *number_of_images, stream)) {
-        fprintf(stderr, "Could not read %d images from: %s\n", *number_of_images, path);
-        free(images);
-        fclose(stream);
-        return NULL;
-    }
-
-    fclose(stream);*/
-
+    
     return NULL;
 }
 
