@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
+#include <limits.h>
+#include <dirent.h>
 
 #include "include/datasets.h"
 
@@ -84,6 +87,30 @@ uint8_t * get_labels(const char * path, uint32_t * number_of_labels)
  */
 image_t * get_images(const char * path, uint32_t * number_of_images)
 {
+    DIR *dir;
+    struct dirent *ent;
+
+    char full_path[PATH_MAX + 1];
+    realpath(path, full_path);
+    strcat(full_path, "/");
+    
+    if ((dir = opendir (path)) != NULL) {
+    /* print all the files and directories within directory */
+        while ((ent = readdir (dir)) != NULL) {
+            if(ent->d_name[0] != '.'){
+                char *buffer = (char *)calloc(PATH_MAX + 1, sizeof(char));
+                strcat(buffer, full_path);
+                strcat(buffer, ent->d_name);
+                printf ("%s\n", buffer);
+                free(buffer);
+            }    
+        }
+        closedir (dir);
+    } else {
+        /* could not open directory */
+        perror ("");
+        return EXIT_FAILURE;
+    }
     /*FILE * stream;
     //mnist_image_file_header_t header;
     image_t * images;
