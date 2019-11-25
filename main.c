@@ -1,8 +1,8 @@
 #include "NN/datasets.c"
 
 int main(){
-    char *path = "img/";
-    uint32_t number = count_files(path);
+    uint32_t number = 6;
 
-    get_images(path, &number);
+    //get_images("img/", &number);
+    //get_labels("img/", &number);
 }

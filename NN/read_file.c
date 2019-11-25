@@ -9,8 +9,6 @@ int read_file(int *pixels) {
     //int pixels[576];
     FILE *file;
 
-    size_t readBytes;
-
     file = fopen("blocks_array.txt", "r");
 
     if (!file) {
@@ -19,7 +17,7 @@ int read_file(int *pixels) {
     }
 
     while (!feof(file)) {
-        readBytes = fread(buffer, sizeof(char), sizeof(buffer), file);
+        fread(buffer, sizeof(char), sizeof(buffer), file);
     }
 
     int iterator = 0;
