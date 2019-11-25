@@ -4,7 +4,7 @@
 
 #include "include/neural_network.h"
   
-void serialize(){
+void serialize(struct neural_network_t_ * input1){
     FILE *outfile; 
       
     // open file for writing 
@@ -13,9 +13,7 @@ void serialize(){
     { 
         fprintf(stderr, "\nError opend file\n"); 
         exit (1); 
-    } 
-  
-    struct neural_network_t_ input1 = {1, "rohan", "sharma"}; 
+    }
       
     // write struct to file 
     fwrite (&input1, sizeof(struct neural_network_t_), 1, outfile); 
