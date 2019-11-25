@@ -8,7 +8,7 @@
 #define IMAGE_WIDTH 24
 #define IMAGE_HEIGHT 24
 #define IMAGE_SIZE IMAGE_WIDTH * IMAGE_HEIGHT
-#define LABELS 10
+#define LABELS 8
 
 /*typedef struct mnist_label_file_header_t_ {
     uint32_t magic_number;

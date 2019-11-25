@@ -76,7 +76,7 @@ def main(argv):
     averages = []
 
     for block in blocks:
-        average = block.mean()
+        average = int(round(block.mean()))
         averages.append(average)
 
         # Mostrar una ventana por cada bloque extraido

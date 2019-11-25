@@ -7,15 +7,15 @@
 int main() {
 
     char buffer[TAMANIO_BUFFER];
-    float pixels[576];
+    int pixels[576];
     FILE *file;
 
     size_t readBytes;
 
-    file = fopen("prueba.txt", "r");
+    file = fopen("blocks_array.txt", "r");
 
     if (!file) {
-        printf("¡No se pudo abrir el archivo %s!", "prueba.txt");
+        printf("¡No se pudo abrir el archivo %s!", "blocks_array.txt");
         return EXIT_FAILURE;
     }
 
@@ -25,16 +25,20 @@ int main() {
 
     int iterator = 0;
 
+    memset(pixels, 0, sizeof(pixels));
+
     char * token = strtok(buffer, "\n");
     while( token != NULL ) {
-        pixels[iterator] = atof(token);
+        pixels[iterator] = atoi(token);
         token = strtok(NULL, "\n");
         iterator++;
     }
 
-    while (readBytes > 0){
-        printf("%f\n",pixels[readBytes]);
-        readBytes--;
+    iterator = 0;
+
+    while (iterator < 576){
+        printf("%d\n",pixels[iterator]);
+        iterator++;
     }
     
     fclose(file);
