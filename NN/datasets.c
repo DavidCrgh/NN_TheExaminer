@@ -26,6 +26,20 @@
 #endif
 }*/
 
+#define ARRAY_SIZE(x) ((int)(sizeof(x) / sizeof((x)[0])))
+
+uint8_t get_label_code(char letter){
+    if(letter == 'X'){ // Label de error
+        return 6;
+    } else if(letter == 'S') { // Label de espacio en blanco
+        return 7;
+    } else
+    {
+        return letter - 65; //ASCII de la A para empezar en 0
+    }
+    
+}
+
 uint32_t count_files(const char *path){
     uint32_t file_count = 0;
     DIR * dirp;
@@ -46,11 +60,11 @@ uint32_t count_files(const char *path){
  * 
  * File format: http://yann.lecun.com/exdb/mnist/
  */
-char * get_labels(const char * path, uint32_t number_of_labels)
+uint8_t * get_labels(const char * path, uint32_t number_of_labels)
 {
     DIR *dir;
     struct dirent *ent;
-    char *labels = malloc(number_of_labels * sizeof(char));
+    uint8_t *labels = malloc(number_of_labels * sizeof(uint8_t));
     int i = 0;
     
     if ((dir = opendir (path)) != NULL) {
@@ -58,7 +72,8 @@ char * get_labels(const char * path, uint32_t number_of_labels)
         memset(labels, 0, sizeof(labels));
         while ((ent = readdir (dir)) != NULL) {
             if(ent->d_name[0] != '.'){
-                labels[i] = ent->d_name[0];
+                uint8_t code = get_label_code(ent->d_name[0]);
+                labels[i] = code;
                 i++;
                 //char letter = ent->d_name[0];
                 //strncat(labels, &letter,1);
@@ -154,6 +169,13 @@ dataset_t * get_dataset(const char * image_path, const char * label_path)
     if (NULL == dataset->labels) {
         free_dataset(dataset);
         return NULL;
+    }
+
+    int MAX = 16;
+
+    printf("dataset->labels\n");
+    for(int i = 0; i < MAX; i++){
+        printf("%d : %d\n", i, dataset->labels[i]);
     }
 
     /*if (number_of_images != number_of_labels) {
