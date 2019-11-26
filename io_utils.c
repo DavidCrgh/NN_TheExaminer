@@ -44,6 +44,22 @@ void print_header(){
     printf("Creado por: Gerardo Gutierrez y David Valverde\n\n");
 }
 
+void print_label(int label_code){
+    char label_char;
+
+    if(label_code == 6){
+        label_char = 'X';
+    }else if (label_code == 7)
+    {
+        label_char = 'S';
+    }else
+    {
+        label_char = label_code + 65; //ASCII de la A
+    }
+    
+    printf("Label retornada: %c\n", label_char);
+}
+
 /**
  * Imprime el menu principal de la aplicacion y retorna la respuesta dada.
 */

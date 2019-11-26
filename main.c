@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
             int label = classify_image(str, &network);
             printf("\033[0m"); // Desactiva rojo 
 
-            printf("Label: %d\n", label);
+            print_label(label);
             break;
         case -1:
             printf("Error: Entrada invalida, intente de nuevo.\n");
