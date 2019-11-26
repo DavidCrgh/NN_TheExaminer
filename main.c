@@ -2,20 +2,47 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <math.h>
+#include <limits.h>
 
 #include "NN/datasets.c"
 #include "NN/neural_network.c"
 
-#define STEPS 10000
+#define STEPS 2000
 #define BATCH_SIZE 100
 
-/**
- * Downloaded from: http://yann.lecun.com/exdb/mnist/
- */
+#define OK       0
+#define NO_INPUT 1
+#define TOO_LONG 2
+
 const char * train_images_file = "training/";
 //const char * train_labels_file = "data/train-labels-idx1-ubyte";
 const char * test_images_file = "test/";
 //const char * test_labels_file = "data/t10k-labels-idx1-ubyte";
+
+static int getLine (char *prmpt, char *buff, size_t sz) {
+    int ch, extra;
+
+    // Get line with buffer overrun protection.
+    if (prmpt != NULL) {
+        printf ("%s", prmpt);
+        fflush (stdout);
+    }
+    if (fgets (buff, sz, stdin) == NULL)
+        return NO_INPUT;
+
+    // If it was too long, there'll be no newline. In that case, we flush
+    // to end of line so that excess doesn't affect the next call.
+    if (buff[strlen(buff)-1] != '\n') {
+        extra = 0;
+        while (((ch = getchar()) != '\n') && (ch != EOF))
+            extra = 1;
+        return (extra == 1) ? TOO_LONG : OK;
+    }
+
+    // Otherwise remove newline and give string back to caller.
+    buff[strlen(buff)-1] = '\0';
+    return OK;
+}
 
 /**
  * Calculate the accuracy of the predictions of a neural network on a dataset.
@@ -46,6 +73,32 @@ float calculate_accuracy(dataset_t * dataset, neural_network_t * network)
 
     // Return the percentage we predicted correctly as the accuracy
     return ((float) correct) / ((float) dataset->size);
+}
+
+/**
+ * Pasa la imagen encontrada en path a la red neuronal para clasificarla
+*/
+int classify_image(char *path, neural_network_t * network){
+    float activations[LABELS], max_activation;
+    int predict; //Indice del label con el mayor valor de activacion
+
+    image_t *imagen = get_image(path);
+    
+    //Calcula las activaciones para la imagen
+    neural_network_hypothesis(imagen, network, activations);
+
+    predict = 0;
+    max_activation = activations[0];
+
+    // Obtiene el indice de la activacion mayor y lo guarda en predict
+    for(int i = 0; i < LABELS; i++){
+        if (max_activation < activations[i]) {
+            max_activation = activations[i];
+            predict = i;
+        }
+    }
+
+    return predict;
 }
 
 int main(int argc, char *argv[])
@@ -82,6 +135,15 @@ int main(int argc, char *argv[])
     // Cleanup
     free_dataset(train_dataset);
     free_dataset(test_dataset);
+
+    while (1 == 1)
+    {
+        char str[PATH_MAX];
+        getLine("Ingrese un path de imagen: \n", str, sizeof(str));
+        int label = classify_image(str, &network);
+        printf("Label: %d\n", label);
+    }
+    
 
     return 0;
 }

@@ -28,6 +28,26 @@
 
 #define ARRAY_SIZE(x) ((int)(sizeof(x) / sizeof((x)[0])))
 
+image_t * get_image(const char *path){
+    image_t * imagen = calloc(1, sizeof(image_t));
+    char *buffer = (char *)calloc(PATH_MAX + 1, sizeof(char));
+
+    // Construye commando para invocar al script de python con el path de la imagen
+    strcat(buffer, "python3 Preprocessor/preproc.py '");
+    strcat(buffer, path);
+    strcat(buffer, "'");
+    printf ("%s\n", buffer);
+
+    system(buffer);
+
+    uint8_t px[IMAGE_SIZE];
+    read_file(px);
+
+    memcpy(imagen->pixels, px, IMAGE_SIZE);
+
+    return imagen;
+}
+
 uint8_t get_label_code(char letter){
     if(letter == 'X'){ // Label de error
         return 6;
@@ -125,7 +145,7 @@ image_t * get_images(const char * path, uint32_t number_of_images)
 
                 uint8_t px[IMAGE_SIZE];
                 read_file(px);
-                full_path[0] = '/'; //Un bug raro ocasiona que el primer caracter sea nulo despues de llamara a read_file
+                full_path[0] = '/'; //Un bug raro hace que el primer caracter sea nulo despues de llamara a read_file
 
                 if(i < number_of_images){
                     memcpy(images[i].pixels, px, IMAGE_SIZE);
