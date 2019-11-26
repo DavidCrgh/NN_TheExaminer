@@ -15,9 +15,7 @@
 #define TOO_LONG 2
 
 const char * train_images_file = "training/";
-//const char * train_labels_file = "data/train-labels-idx1-ubyte";
 const char * test_images_file = "test/";
-//const char * test_labels_file = "data/t10k-labels-idx1-ubyte";
 
 static int getLine (char *prmpt, char *buff, size_t sz) {
     int ch, extra;
@@ -101,11 +99,9 @@ int classify_image(char *path, neural_network_t * network){
     return predict;
 }
 
-int main(int argc, char *argv[])
-{
+void train_network(neural_network_t * network){
     dataset_t * train_dataset, * test_dataset;
     dataset_t batch;
-    neural_network_t network;
     float loss, accuracy;
     int i, batches;
 
@@ -114,7 +110,7 @@ int main(int argc, char *argv[])
     test_dataset = get_dataset(test_images_file, test_images_file);
 
     // Initialise weights and biases with random values
-    neural_network_random_weights(&network);
+    //neural_network_random_weights(network);
 
     // Calculate how many batches (so we know when to wrap around)
     batches = train_dataset->size / BATCH_SIZE;
@@ -124,10 +120,10 @@ int main(int argc, char *argv[])
         make_batch(train_dataset, &batch, 100, i % batches);
 
         // Run one step of gradient descent and calculate the loss
-        loss = neural_network_training_step(&batch, &network, 0.5);
+        loss = neural_network_training_step(&batch, network, 0.5);
 
         // Calculate the accuracy using the whole test dataset
-        accuracy = calculate_accuracy(test_dataset, &network);
+        accuracy = calculate_accuracy(test_dataset, network);
 
         printf("Step %04d\tAverage Loss: %.2f\tAccuracy: %.3f\n", i, loss / batch.size, accuracy);
     }
@@ -135,6 +131,19 @@ int main(int argc, char *argv[])
     // Cleanup
     free_dataset(train_dataset);
     free_dataset(test_dataset);
+
+    //TODO: serializar la red
+}
+
+int main(int argc, char *argv[])
+{
+    neural_network_t network;
+
+    // TODO: Aqui intentar de-serializar la red, si falla correr la funcion de abajo
+    // Initialise weights and biases with random values
+    neural_network_random_weights(&network);
+
+    train_network(&network);
 
     while (1 == 1)
     {
