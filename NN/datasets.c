@@ -171,13 +171,6 @@ dataset_t * get_dataset(const char * image_path, const char * label_path)
         return NULL;
     }
 
-    int MAX = 16;
-
-    printf("dataset->labels\n");
-    for(int i = 0; i < MAX; i++){
-        printf("%d : %d\n", i, dataset->labels[i]);
-    }
-
     /*if (number_of_images != number_of_labels) {
         fprintf(stderr, "Number of images does not match number of labels (%d != %d)\n", number_of_images, number_of_labels);
         free_dataset(dataset);
@@ -203,7 +196,7 @@ void free_dataset(dataset_t * dataset)
 /**
  * Fills the batch dataset with a subset of the parent dataset.
  */
-int batch(dataset_t * dataset, dataset_t * batch, int size, int number)
+int make_batch(dataset_t * dataset, dataset_t * batch, int size, int number)
 {
     int start_offset;
 

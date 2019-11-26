@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "string.h": "c",
-        "datasets.h": "c"
+        "datasets.h": "c",
+        "neural_network.h": "c"
     }
 }
