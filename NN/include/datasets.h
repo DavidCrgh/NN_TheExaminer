@@ -19,8 +19,8 @@ typedef struct dataset_t_ {
 } dataset_t;
 
 dataset_t * get_dataset(const char * image_path, const char * label_path);
-image_t * get_images(const char * path, uint32_t * number_of_images);
-char * get_labels(const char * path, uint32_t * number_of_labels);
+image_t * get_images(const char * path, uint32_t number_of_images);
+char * get_labels(const char * path, uint32_t number_of_labels);
 void free_dataset(dataset_t * dataset);
 int batch(dataset_t * dataset, dataset_t * batch, int batch_size, int batch_number);
 

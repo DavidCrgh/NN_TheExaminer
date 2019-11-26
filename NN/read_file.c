@@ -4,7 +4,7 @@
 
 #define TAMANIO_BUFFER 10000
 
-int read_file(int *pixels) {
+uint8_t read_file(uint8_t *pixels) {
     char buffer[TAMANIO_BUFFER];
     //int pixels[576];
     FILE *file;
@@ -26,7 +26,7 @@ int read_file(int *pixels) {
 
     char * token = strtok(buffer, "\n");
     while( token != NULL ) {
-        pixels[iterator] = atoi(token);
+        pixels[iterator] = (uint8_t) atoi(token);
         token = strtok(NULL, "\n");
         iterator++;
     }
