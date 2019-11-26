@@ -66,7 +66,7 @@ void neural_network_hypothesis(image_t * image, neural_network_t * network, floa
 
         for (j = 0; j < IMAGE_SIZE; j++) {
             
-            activations[i] += network->W[i][j] * abs((int) PIXEL_SCALE(image->pixels[j]) - 1);
+            activations[i] += network->W[i][j] * PIXEL_SCALE(image->pixels[j]);
         }
     }
 

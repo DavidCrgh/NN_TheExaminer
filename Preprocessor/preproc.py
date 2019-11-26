@@ -69,8 +69,8 @@ def listToFile(_list):
         f.write(" ") # Espacio en blanco para delimitar final
 
 def main(argv):
-    # imagen = cv2.imread('img/A10 - FA CV.PNG', 0)
     imagen = cv2.imread(argv[0], 0) # Path en primer argumento, Flag 0 para grayscale
+    imagen = cv2.bitwise_not(imagen) # Invierte los colores de la escala de gris
 
     blocks = createBlocks(imagen)
     averages = []

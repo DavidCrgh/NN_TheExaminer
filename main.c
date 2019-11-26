@@ -6,7 +6,7 @@
 #include "NN/datasets.c"
 #include "NN/neural_network.c"
 
-#define STEPS 1000
+#define STEPS 10000
 #define BATCH_SIZE 100
 
 /**
