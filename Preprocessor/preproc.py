@@ -8,8 +8,8 @@ import cv2
 
 OUTPUT_FILE = 'blocks_array.txt'
 
-GRID_ROWS = 24
-GRID_COLS = 24
+GRID_ROWS = 26
+GRID_COLS = 26
 
 def createBlocks(img):
     blocksArray = []

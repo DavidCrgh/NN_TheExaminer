@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#define IMAGE_WIDTH 24
-#define IMAGE_HEIGHT 24
+#define IMAGE_WIDTH 26
+#define IMAGE_HEIGHT 26
 #define IMAGE_SIZE IMAGE_WIDTH * IMAGE_HEIGHT
 #define LABELS 8
 
