@@ -6,6 +6,7 @@
 
 #include "NN/datasets.c"
 #include "NN/neural_network.c"
+#include "NN/serializer.c"
 
 #define STEPS 2000
 #define BATCH_SIZE 100
@@ -133,6 +134,7 @@ void train_network(neural_network_t * network){
     free_dataset(test_dataset);
 
     //TODO: serializar la red
+    serialize(network);
 }
 
 int main(int argc, char *argv[])
@@ -140,10 +142,13 @@ int main(int argc, char *argv[])
     neural_network_t network;
 
     // TODO: Aqui intentar de-serializar la red, si falla correr la funcion de abajo
-    // Initialise weights and biases with random values
-    neural_network_random_weights(&network);
+    if (deserialize(&network)){
 
-    train_network(&network);
+    } else
+    {
+        neural_network_random_weights(&network);
+        train_network(&network);
+    }
 
     while (1 == 1)
     {
@@ -151,8 +156,7 @@ int main(int argc, char *argv[])
         getLine("Ingrese un path de imagen: \n", str, sizeof(str));
         int label = classify_image(str, &network);
         printf("Label: %d\n", label);
-    }
-    
+    }   
 
     return 0;
 }
