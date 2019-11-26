@@ -8,26 +8,6 @@
 #include "include/datasets.h"
 #include "read_file.c"
 
-/**
- * Convert from the big endian format in the dataset if we're on a little endian
- * machine.
- */
-/*uint32_t map_uint32(uint32_t in)
-{
-#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-    return (
-        ((in & 0xFF000000) >> 24) |
-        ((in & 0x00FF0000) >>  8) |
-        ((in & 0x0000FF00) <<  8) |
-        ((in & 0x000000FF) << 24)
-    );
-#else
-    return in;
-#endif
-}*/
-
-#define ARRAY_SIZE(x) ((int)(sizeof(x) / sizeof((x)[0])))
-
 image_t * get_image(const char *path){
     image_t * imagen = calloc(1, sizeof(image_t));
     char *buffer = (char *)calloc(PATH_MAX + 1, sizeof(char));
@@ -36,13 +16,17 @@ image_t * get_image(const char *path){
     strcat(buffer, "python3 Preprocessor/preproc.py '");
     strcat(buffer, path);
     strcat(buffer, "'");
-    printf ("%s\n", buffer);
+    
+    printf("\033[0;31m"); // Activa rojo
+    printf ("Calling script: %s\n\n", buffer);
+    printf("\033[0m"); // Desactiva rojo
 
+    // Ejecuta el comando que corre el script
     system(buffer);
 
+    // Lee los pixeles del archivo creado por el script y los guarda en la struct imagen
     uint8_t px[IMAGE_SIZE];
     read_file(px);
-
     memcpy(imagen->pixels, px, IMAGE_SIZE);
 
     return imagen;
@@ -95,8 +79,6 @@ uint8_t * get_labels(const char * path, uint32_t number_of_labels)
                 uint8_t code = get_label_code(ent->d_name[0]);
                 labels[i] = code;
                 i++;
-                //char letter = ent->d_name[0];
-                //strncat(labels, &letter,1);
             }    
         }
         closedir (dir);
@@ -138,11 +120,14 @@ image_t * get_images(const char * path, uint32_t number_of_images)
                 strcat(buffer, full_path);
                 strcat(buffer, ent->d_name);
                 strcat(buffer, "'");
-                printf ("%s\n", buffer);
+
+                // Imprimir invocaciones a strings
+                printf ("Calling script %d of %d: %s\n\n", i + 1, number_of_images, buffer);
 
                 // Ejecuta el comando que corre el script
                 system(buffer);
 
+                // Lee los pixeles del archivo creado por el script y los guarda en la struct imagen
                 uint8_t px[IMAGE_SIZE];
                 read_file(px);
                 full_path[0] = '/'; //Un bug raro hace que el primer caracter sea nulo despues de llamara a read_file
@@ -190,12 +175,6 @@ dataset_t * get_dataset(const char * image_path, const char * label_path)
         free_dataset(dataset);
         return NULL;
     }
-
-    /*if (number_of_images != number_of_labels) {
-        fprintf(stderr, "Number of images does not match number of labels (%d != %d)\n", number_of_images, number_of_labels);
-        free_dataset(dataset);
-        return NULL;
-    }*/
 
     dataset->size = number_of_images;
 

@@ -4,43 +4,17 @@
 #include <math.h>
 #include <limits.h>
 
+#include "io_utils.c"
+
 #include "NN/datasets.c"
 #include "NN/neural_network.c"
 
-#define STEPS 2000
+#define STEPS 1000
 #define BATCH_SIZE 100
-
-#define OK       0
-#define NO_INPUT 1
-#define TOO_LONG 2
 
 const char * train_images_file = "training/";
 const char * test_images_file = "test/";
 
-static int getLine (char *prmpt, char *buff, size_t sz) {
-    int ch, extra;
-
-    // Get line with buffer overrun protection.
-    if (prmpt != NULL) {
-        printf ("%s", prmpt);
-        fflush (stdout);
-    }
-    if (fgets (buff, sz, stdin) == NULL)
-        return NO_INPUT;
-
-    // If it was too long, there'll be no newline. In that case, we flush
-    // to end of line so that excess doesn't affect the next call.
-    if (buff[strlen(buff)-1] != '\n') {
-        extra = 0;
-        while (((ch = getchar()) != '\n') && (ch != EOF))
-            extra = 1;
-        return (extra == 1) ? TOO_LONG : OK;
-    }
-
-    // Otherwise remove newline and give string back to caller.
-    buff[strlen(buff)-1] = '\0';
-    return OK;
-}
 
 /**
  * Calculate the accuracy of the predictions of a neural network on a dataset.
@@ -106,15 +80,15 @@ void train_network(neural_network_t * network){
     int i, batches;
 
     // Read the datasets from the files
+    printf("\033[0;31m"); // Activa rojo
     train_dataset = get_dataset(train_images_file, train_images_file);
     test_dataset = get_dataset(test_images_file, test_images_file);
-
-    // Initialise weights and biases with random values
-    //neural_network_random_weights(network);
+    printf("\033[0m"); // Desactiva rojo 
 
     // Calculate how many batches (so we know when to wrap around)
     batches = train_dataset->size / BATCH_SIZE;
 
+    printf("\033[0;32m"); // Activa verde
     for (i = 0; i < STEPS; i++) {
         // Initialise a new batch
         make_batch(train_dataset, &batch, 100, i % batches);
@@ -127,32 +101,58 @@ void train_network(neural_network_t * network){
 
         printf("Step %04d\tAverage Loss: %.2f\tAccuracy: %.3f\n", i, loss / batch.size, accuracy);
     }
+    printf("\033[0m"); // Desactiva verde
+
+    printf("\nEntrenamiento finalizado.\n");
 
     // Cleanup
     free_dataset(train_dataset);
     free_dataset(test_dataset);
 
     //TODO: serializar la red
+    printf("Red serializada y guardada!\n\n");
 }
 
 int main(int argc, char *argv[])
 {
     neural_network_t network;
+    int seleccion = 0;
 
     // TODO: Aqui intentar de-serializar la red, si falla correr la funcion de abajo
+    // Hacer un print cuando no se pudo serializar la red para evitar equivocarse
     // Initialise weights and biases with random values
     neural_network_random_weights(&network);
 
-    train_network(&network);
+    print_header();
+    while(seleccion != 3){
+        seleccion = run_menu();
 
-    while (1 == 1)
-    {
-        char str[PATH_MAX];
-        getLine("Ingrese un path de imagen: \n", str, sizeof(str));
-        int label = classify_image(str, &network);
-        printf("Label: %d\n", label);
+        switch (seleccion)
+        {
+        case 1:
+            printf("Entrenando red...\n\n");
+            train_network(&network);
+            break;
+        case 2: 
+            printf("Clasificador de imagenes\n");
+            char str[PATH_MAX];
+            getLine("Ingrese un path de imagen: \n>> ", str, sizeof(str));
+
+            printf("\033[0;31m"); // Activa rojo
+            int label = classify_image(str, &network);
+            printf("\033[0m"); // Desactiva rojo 
+
+            printf("Label: %d\n", label);
+            break;
+        case -1:
+            printf("Error: Entrada invalida, intente de nuevo.\n");
+            break;         
+        default:
+            break;
+        }
+
+        printf("=========================================================\n\n");
     }
-    
 
     return 0;
 }
