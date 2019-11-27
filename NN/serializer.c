@@ -27,9 +27,8 @@ void serialize(struct neural_network_t_ * input1){
     fclose (outfile);
 }
 
-int deserialize(){
-    FILE *infile; 
-    struct neural_network_t_ input; 
+int deserialize(neural_network_t * network){
+    FILE *infile;
       
     // Open person.dat for reading 
     infile = fopen ("nn.txt", "r"); 
@@ -40,7 +39,7 @@ int deserialize(){
     } 
       
     // read file contents till end of file 
-    if (fread(&input, sizeof(struct neural_network_t_), 1, infile) == 1){
+    if (fread(&network, sizeof(network), 1, infile) == 1){
         fclose (infile); 
         return 1;
     }
