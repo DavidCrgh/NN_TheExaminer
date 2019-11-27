@@ -8,7 +8,7 @@ void serialize(struct neural_network_t_ * input1){
     FILE *outfile; 
       
     // open file for writing 
-    outfile = fopen ("person.txt", "w"); 
+    outfile = fopen ("nn.txt", "w"); 
     if (outfile == NULL) 
     { 
         fprintf(stderr, "\nError opend file\n"); 
@@ -27,21 +27,26 @@ void serialize(struct neural_network_t_ * input1){
     fclose (outfile);
 }
 
-void deserialize(){
+int deserialize(){
     FILE *infile; 
     struct neural_network_t_ input; 
       
     // Open person.dat for reading 
-    infile = fopen ("person.txt", "r"); 
+    infile = fopen ("nn.txt", "r"); 
     if (infile == NULL) 
     { 
         fprintf(stderr, "\nError opening file\n"); 
-        exit (1); 
+        return 0;
     } 
       
     // read file contents till end of file 
-    while(fread(&input, sizeof(struct neural_network_t_), 1, infile))
-  
-    // close file 
-    fclose (infile); 
+    if (fread(&input, sizeof(struct neural_network_t_), 1, infile) == 1){
+        fclose (infile); 
+        return 1;
+    }
+    else
+    {
+        fclose (infile); 
+        return 0;
+    }
 }

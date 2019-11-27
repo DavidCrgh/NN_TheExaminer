@@ -18,8 +18,9 @@ static int getLine (char *prmpt, char *buff, size_t sz) {
         printf ("%s", prmpt);
         fflush (stdout);
     }
-    if (fgets (buff, sz, stdin) == NULL)
-        return NO_INPUT;
+    //if (fgets (buff, sz, stdin) == NULL)
+      //  return NO_INPUT;
+    getline(&buff, &sz, stdin);
 
     // If it was too long, there'll be no newline. In that case, we flush
     // to end of line so that excess doesn't affect the next call.

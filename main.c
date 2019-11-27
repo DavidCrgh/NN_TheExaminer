@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -8,6 +10,7 @@
 
 #include "NN/datasets.c"
 #include "NN/neural_network.c"
+#include "NN/serializer.c"
 
 #define STEPS 1000
 #define BATCH_SIZE 100
@@ -110,6 +113,7 @@ void train_network(neural_network_t * network){
     free_dataset(test_dataset);
 
     //TODO: serializar la red
+    serialize(network);
     printf("Red serializada y guardada!\n\n");
 }
 
@@ -118,10 +122,12 @@ int main(int argc, char *argv[])
     neural_network_t network;
     int seleccion = 0;
 
-    // TODO: Aqui intentar de-serializar la red, si falla correr la funcion de abajo
     // Hacer un print cuando no se pudo serializar la red para evitar equivocarse
     // Initialise weights and biases with random values
-    neural_network_random_weights(&network);
+    if (deserialize(&network) == 0){
+        neural_network_random_weights(&network);
+        printf("No se encontro una red para de-serializar, se iniciara una red con pesos aleatorios!\n\n");
+    }
 
     print_header();
     while(seleccion != 3){
