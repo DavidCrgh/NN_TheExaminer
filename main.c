@@ -13,7 +13,7 @@
 #include "NN/neural_network.c"
 #include "NN/serializer.c"
 
-#define STEPS 1000
+#define STEPS 3000
 #define BATCH_SIZE 100
 
 const char * train_images_file = "training/";
