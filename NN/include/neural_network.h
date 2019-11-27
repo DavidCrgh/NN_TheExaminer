@@ -1,3 +1,11 @@
+/**
+ * Codigo adaptado del repositorio mnist-neural-network-plain-c
+ * creado originalmente por AndrewCarterUK
+ * 
+ * Link de GitHub: https://github.com/AndrewCarterUK/mnist-neural-network-plain-c
+ * 
+ * Archivo original: neural_network.h
+*/
 #ifndef NEURAL_NETWORK_H_
 #define NEURAL_NETWORK_H_
 

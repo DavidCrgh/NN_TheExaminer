@@ -9,6 +9,9 @@
  * 
  * Retorna 0 para exito, 1 cuando no hay entrada y 2 cuando la entrada es muy
  * larga.
+ * 
+ * Codigo original obtenido del usuario de StackOverflow, paxdiablo
+ * Link: https://stackoverflow.com/questions/4023895/how-do-i-read-a-string-entered-by-the-user-in-c
 */
 static int getLine (char *prmpt, char *buff, size_t sz) {
     int ch, extra;
@@ -45,6 +48,10 @@ void print_header(){
     printf("Creado por: Gerardo Gutierrez y David Valverde\n\n");
 }
 
+/**
+ * Imprime la letra correspondiente al codigo de label (0-7) ingresado.
+ * 
+*/
 void print_label(int label_code){
     char label_char;
 

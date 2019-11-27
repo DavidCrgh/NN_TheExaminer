@@ -1,3 +1,11 @@
+/**
+ * Codigo adaptado del repositorio mnist-neural-network-plain-c
+ * creado originalmente por AndrewCarterUK
+ * 
+ * Link de GitHub: https://github.com/AndrewCarterUK/mnist-neural-network-plain-c
+ * 
+ * Archivo original: mnist.c
+*/
 #define _GNU_SOURCE
 
 #include <stdio.h>

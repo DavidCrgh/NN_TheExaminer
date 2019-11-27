@@ -1,3 +1,10 @@
+/**
+ * Codigo original obtenido de pagina GeeksForGeeks
+ * 
+ * Titulo: Read/Write structure to a file in C
+ * Link: https://www.geeksforgeeks.org/readwrite-structure-file-c/
+ * 
+*/
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <string.h> 

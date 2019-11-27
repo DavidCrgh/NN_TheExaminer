@@ -1,3 +1,11 @@
+/**
+ * Codigo adaptado del repositorio mnist-neural-network-plain-c
+ * creado originalmente por AndrewCarterUK
+ * 
+ * Link de GitHub: https://github.com/AndrewCarterUK/mnist-neural-network-plain-c
+ * 
+ * Archivo original: mnist_file.c
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -8,6 +16,10 @@
 #include "include/datasets.h"
 #include "read_file.c"
 
+/**
+ * Initialize an image struct from the specified path.
+ * 
+*/
 image_t * get_image(const char *path){
     image_t * imagen = calloc(1, sizeof(image_t));
     char *buffer = (char *)calloc(PATH_MAX + 1, sizeof(char));
@@ -32,6 +44,9 @@ image_t * get_image(const char *path){
     return imagen;
 }
 
+/**
+ * Convert a label's char to a digit from 0-7.
+*/
 uint8_t get_label_code(char letter){
     if(letter == 'X'){ // Label de error
         return 6;
@@ -44,6 +59,9 @@ uint8_t get_label_code(char letter){
     
 }
 
+/**
+ * Count the files in a directory.
+*/
 uint32_t count_files(const char *path){
     uint32_t file_count = 0;
     DIR * dirp;
@@ -60,9 +78,8 @@ uint32_t count_files(const char *path){
 }
 
 /**
- * Read labels from file.
+ * Read labels from dir in path.
  * 
- * File format: http://yann.lecun.com/exdb/mnist/
  */
 uint8_t * get_labels(const char * path, uint32_t number_of_labels)
 {
@@ -92,9 +109,8 @@ uint8_t * get_labels(const char * path, uint32_t number_of_labels)
 }
 
 /**
- * Read images from file.
+ * Read images from dir in file.
  * 
- * File format: http://yann.lecun.com/exdb/mnist/
  */
 image_t * get_images(const char * path, uint32_t number_of_images)
 {
@@ -151,6 +167,10 @@ image_t * get_images(const char * path, uint32_t number_of_images)
     return images;
 }
 
+/**
+ * Initialize a dataset struct from the specified image and label paths.
+ * 
+*/
 dataset_t * get_dataset(const char * image_path, const char * label_path)
 {
     dataset_t * dataset;
