@@ -29,6 +29,10 @@ const char * test_images_file = "test/";
 
 
 /**
+ * calculate_accuracy
+ * Calcula la exactitud de las predicciones realizadas por la red para el dataset de pruebas.
+ *
+ * Desc. original:
  * Calculate the accuracy of the predictions of a neural network on a dataset.
  */
 float calculate_accuracy(dataset_t * dataset, neural_network_t * network)
@@ -121,11 +125,14 @@ void train_network(neural_network_t * network){
     free_dataset(train_dataset);
     free_dataset(test_dataset);
 
-    //TODO: serializar la red
     serialize(network);
     printf("Red serializada y guardada!\n\n");
 }
 
+/**
+ * main
+ * Ejecuta el programa principal de linea de comandos.
+ */
 int main(int argc, char *argv[])
 {
     neural_network_t network;

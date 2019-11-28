@@ -5,6 +5,9 @@
  * Link de GitHub: https://github.com/AndrewCarterUK/mnist-neural-network-plain-c
  * 
  * Archivo original: neural_network.c
+ *
+ * Todas las funciones en este archivo conservan su código original y descripciones
+ * originales.
 */
 #include <stdlib.h>
 #include <string.h>

@@ -17,7 +17,8 @@
 #include "read_file.c"
 
 /**
- * Initialize an image struct from the specified path.
+ * get_image
+ * Inicializa un struct de tipo image_t a partir del path especificado.
  * 
 */
 image_t * get_image(const char *path){
@@ -45,7 +46,9 @@ image_t * get_image(const char *path){
 }
 
 /**
- * Convert a label's char to a digit from 0-7.
+ * get_label_code
+ * Convierte el char de un label a su codigo entre 0 y 7 correspondiente.}
+ *
 */
 uint8_t get_label_code(char letter){
     if(letter == 'X'){ // Label de error
@@ -60,7 +63,8 @@ uint8_t get_label_code(char letter){
 }
 
 /**
- * Count the files in a directory.
+ * count_files
+ * Cuenta los archivos en un directorio.
 */
 uint32_t count_files(const char *path){
     uint32_t file_count = 0;
@@ -78,8 +82,16 @@ uint32_t count_files(const char *path){
 }
 
 /**
- * Read labels from dir in path.
+ * get_labels
+ * Obtiene un arreglo de labels del dataset encontrado en el path ingresado.
+ *
+ * Funcion original: get_labels
+ *
+ * Desc. original:
+ * Read labels from file.
  * 
+ * File format: http://yann.lecun.com/exdb/mnist/
+ *
  */
 uint8_t * get_labels(const char * path, uint32_t number_of_labels)
 {
@@ -109,8 +121,16 @@ uint8_t * get_labels(const char * path, uint32_t number_of_labels)
 }
 
 /**
- * Read images from dir in file.
+ * get_images
+ * Obtiene un arreglo de structs image_t con las imagenes encontradas en el path ingresado.
+ *
+ * Funcion original: get_images
+ *
+ * Desc. original:
+ * Read images from file.
  * 
+ * File format: http://yann.lecun.com/exdb/mnist/
+ *
  */
 image_t * get_images(const char * path, uint32_t number_of_images)
 {
@@ -168,6 +188,12 @@ image_t * get_images(const char * path, uint32_t number_of_images)
 }
 
 /**
+ * get_dataset
+ * Inicializa un struct dataset_t con las imagenes y los labels encontrados en el path
+ * dado.
+ *
+ * Func. original: mnist_get_dataset
+ * Desc. original:
  * Initialize a dataset struct from the specified image and label paths.
  * 
 */
@@ -202,6 +228,9 @@ dataset_t * get_dataset(const char * image_path, const char * label_path)
 }
 
 /**
+ * free_dataset
+ * 
+ * Desc. original:
  * Free all the memory allocated in a dataset. This should not be used on a
  * batched dataset as the memory is allocated to the parent.
  */
@@ -213,6 +242,9 @@ void free_dataset(dataset_t * dataset)
 }
 
 /**
+ * make_batch
+ *
+ * Desc. original:
  * Fills the batch dataset with a subset of the parent dataset.
  */
 int make_batch(dataset_t * dataset, dataset_t * batch, int size, int number)
